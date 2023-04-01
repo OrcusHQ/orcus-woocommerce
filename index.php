@@ -66,7 +66,7 @@ function orcuspay_woo_init() {
                 ),
                 'description' => array(
                     'title'       => __( 'Description', 'orcuspay-woo' ),
-                    'type'        => 'textarea',
+                    'type'        => 'text',
                     'description' => __( 'This controls the description which the user sees during checkout.', 'orcuspay-woo' ),
                     'default'     => __( 'Pay with OrcusPay', 'orcuspay-woo' ),
                     'desc_tip'    => true,
@@ -74,15 +74,27 @@ function orcuspay_woo_init() {
                 'access_key' => array(
                     'title'       => __( 'Access key', 'orcuspay-woo' ),
                     'type'        => 'text',
+                    'description' => __( 'Get your access key from <a href="https://dashboard.orcuspay.com/developers" target="_blank" rel="noreferrer>OrcusPay Dashboard</a>.', 'orcuspay-woo' ),
                 ),
                 'secret_key' => array(
                     'title'       => __( 'Secret key', 'orcuspay-woo' ),
                     'type'        => 'password',
+                    'description' => __( 'Get your secret key from <a href="https://dashboard.orcuspay.com/developers" target="_blank" rel="noreferrer>OrcusPay Dashboard</a>.', 'orcuspay-woo' ),
+                ),
+                'webhook_url' => array(
+                    'type'        => 'text',
+                    'title'       => __( 'Webhook URL', 'orcuspay-woo' ),
+                    'default'     => sprintf(
+                        '%s',
+                        esc_url( get_site_url() . '/wc-api/' . $this->id )
+                    ),
+                    'disabled'    => true,
+                    'description' => __( '<a href="https://dashboard.orcuspay.com/developers/webhooks" target="_blank" rel="noreferrer>Add</a> a new webhook for this URL subscribing <code>checkout.session.complete</code> events.', 'orcuspay-woo' ),
                 ),
                 'webhook_secret' => array(
                     'title'       => __( 'Webhook secret', 'orcuspay-woo' ),
                     'type'        => 'password',
-                    'description' => __( 'The webhook secret is used to authenticate webhooks sent from OrcusPay.', 'orcuspay-woo' ),
+                    'description' => __( 'The webhook secret is used to authenticate webhooks sent from OrcusPay. Get it from your <a href="https://dashboard.orcuspay.com/developers/webhooks" target="_blank" rel="noreferrer>OrcusPay Dashboard</a>.', 'orcuspay-woo' ),
                 ),
             ) );
         }
