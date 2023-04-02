@@ -14,5 +14,9 @@
             "name": "orcuspay",
             "email": "support@orcuspay.com"
         }
-    ]
+    ],
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^2.2",
+        "wp-coding-standards/wpcs": "^0.9.0"
+    }
 }
