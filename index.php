@@ -110,12 +110,10 @@ function orcuspay_woo_init() {
 		public function process_payment( $order_id ) {
 			global $woocommerce;
 
-			$order = wc_get_order( $order_id );
-
-			$items    = $order->get_items();
+			$order    = wc_get_order( $order_id );
 			$products = array();
 
-			foreach ( $items as $item ) {
+			foreach ( $order->get_items() as $item ) {
 				$product    = $item->get_product();
 				$products[] = array(
 					'quantity'   => $item->get_quantity(),
@@ -125,6 +123,19 @@ function orcuspay_woo_init() {
 							'name'        => $product->get_name(),
 							'images'      => array( wp_get_attachment_url( $product->get_image_id() ) ),
 							'description' => $product->get_description()
+						)
+					)
+				);
+			}
+
+			foreach ( $order->get_coupon_codes() as $coupon ) {
+				$coupon     = new WC_Coupon( $coupon );
+				$products[] = array(
+					'quantity'   => 1,
+					'price_data' => array(
+						'unit_amount'  => - ( $coupon->get_amount() * 100 ),
+						'product_data' => array(
+							'name' => "Coupon: " . $coupon->get_code(),
 						)
 					)
 				);
