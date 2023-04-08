@@ -1,21 +1,26 @@
 <?php
 
 /*
- * Plugin Name: OrcusPay for WooCommerce
- * Plugin URI: https://orcuspay.com/
- * Description: OrcusPay for WooCommerce
- * Author: OrcusPay
- * Author URI: https://orcuspay.com/
+ * Plugin Name: Orcus for WooCommerce
+ * Description: Orcus for WooCommerce
+ * Author: Orcus
+ * Author URI: https://orcus.com.bd/
  * Version: 0.1.0
  * Requires at least: 5.9
- * Tested up to: 6.1
+ * Tested up to: 6.2
  * WC requires at least: 7.1
  * WC tested up to: 7.4
- * Text Domain: orcuspay-woo
+ * License: GPL2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: orcus-woo
 */
 
-define( 'ORCUSPAY_WOO_PLUGIN_SLUG', 'orcuspay' );
-define( 'ORCUSPAY_WOO_PLUGIN_BASEPATH', plugin_basename( __FILE__ ) );
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+define( 'ORCUS_WOO_PLUGIN_SLUG', 'orcus' );
+define( 'ORCUS_WOO_PLUGIN_BASEPATH', plugin_basename( __FILE__ ) );
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -23,20 +28,20 @@ if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins',
 	return;
 }
 
-add_action( 'plugins_loaded', 'orcuspay_woo_init', 11 );
+add_action( 'plugins_loaded', 'orcus_woo_init', 11 );
 
-function orcuspay_woo_init() {
+function orcus_woo_init() {
 	if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
 		return;
 	}
 
-	class WC_OrcusPay extends WC_Payment_Gateway {
+	class WC_Orcus extends WC_Payment_Gateway {
 		public function __construct() {
-			$this->id                 = ORCUSPAY_WOO_PLUGIN_SLUG;
-			$this->icon               = plugins_url( 'assets/images/orcuspay.png', __FILE__ );
+			$this->id                 = ORCUS_WOO_PLUGIN_SLUG;
+			$this->icon               = plugins_url( 'assets/images/orcus.png', __FILE__ );
 			$this->has_fields         = false;
-			$this->method_title       = __( 'OrcusPay', 'orcuspay-woo' );
-			$this->method_description = __( 'OrcusPay for WooCommerce', 'orcuspay-woo' );
+			$this->method_title       = __( 'Orcus', 'orcus-woo' );
+			$this->method_description = __( 'Orcus for WooCommerce', 'orcus-woo' );
 
 			$this->init_form_fields();
 
@@ -52,57 +57,57 @@ function orcuspay_woo_init() {
 				$this,
 				'process_admin_options'
 			) );
-			add_action( 'woocommerce_api_orcuspay', array( $this, 'webhook' ) );
-			add_filter( 'plugin_action_links_' . ORCUSPAY_WOO_PLUGIN_BASEPATH, array( $this, 'actionLinks' ), 10, 5 );
+			add_action( 'woocommerce_api_orcus', array( $this, 'webhook' ) );
+			add_filter( 'plugin_action_links_' . ORCUS_WOO_PLUGIN_BASEPATH, array( $this, 'actionLinks' ), 10, 5 );
 		}
 
 		public function init_form_fields() {
-			$this->form_fields = apply_filters( 'orcuspay_woo_fields', array(
+			$this->form_fields = apply_filters( 'orcus_woo_fields', array(
 				'enabled'        => array(
-					'title'       => __( 'Enable/Disable', 'orcuspay-woo' ),
-					'label'       => __( 'Enable OrcusPay', 'orcuspay-woo' ),
+					'title'       => __( 'Enable/Disable', 'orcus-woo' ),
+					'label'       => __( 'Enable Orcus', 'orcus-woo' ),
 					'type'        => 'checkbox',
 					'description' => '',
 					'default'     => 'yes'
 				),
 				'title'          => array(
-					'title'       => __( 'Title', 'orcuspay-woo' ),
+					'title'       => __( 'Title', 'orcus-woo' ),
 					'type'        => 'text',
-					'description' => __( 'This controls the title which the user sees during checkout.', 'orcuspay-woo' ),
-					'default'     => __( 'OrcusPay', 'orcuspay-woo' ),
+					'description' => __( 'This controls the title which the user sees during checkout.', 'orcus-woo' ),
+					'default'     => __( 'Orcus', 'orcus-woo' ),
 					'desc_tip'    => true,
 				),
 				'description'    => array(
-					'title'       => __( 'Description', 'orcuspay-woo' ),
+					'title'       => __( 'Description', 'orcus-woo' ),
 					'type'        => 'text',
-					'description' => __( 'This controls the description which the user sees during checkout.', 'orcuspay-woo' ),
-					'default'     => __( 'Pay with OrcusPay', 'orcuspay-woo' ),
+					'description' => __( 'This controls the description which the user sees during checkout.', 'orcus-woo' ),
+					'default'     => __( 'Pay with Orcus', 'orcus-woo' ),
 					'desc_tip'    => true,
 				),
 				'access_key'     => array(
-					'title'       => __( 'Access key', 'orcuspay-woo' ),
+					'title'       => __( 'Access key', 'orcus-woo' ),
 					'type'        => 'text',
-					'description' => __( 'Get your access key from <a href="https://dashboard.orcuspay.com/developers" target="_blank" rel="noreferrer>OrcusPay Dashboard</a>.', 'orcuspay-woo' ),
+					'description' => __( 'Get your access key from <a href="https://dashboard.orcus.com/developers" target="_blank" rel="noreferrer>Orcus Dashboard</a>.', 'orcus-woo' ),
 				),
 				'secret_key'     => array(
-					'title'       => __( 'Secret key', 'orcuspay-woo' ),
+					'title'       => __( 'Secret key', 'orcus-woo' ),
 					'type'        => 'password',
-					'description' => __( 'Get your secret key from <a href="https://dashboard.orcuspay.com/developers" target="_blank" rel="noreferrer>OrcusPay Dashboard</a>.', 'orcuspay-woo' ),
+					'description' => __( 'Get your secret key from <a href="https://dashboard.orcus.com/developers" target="_blank" rel="noreferrer>Orcus Dashboard</a>.', 'orcus-woo' ),
 				),
 				'webhook_url'    => array(
 					'type'        => 'text',
-					'title'       => __( 'Webhook URL', 'orcuspay-woo' ),
+					'title'       => __( 'Webhook URL', 'orcus-woo' ),
 					'default'     => sprintf(
 						'%s',
 						esc_url( get_site_url() . '/wc-api/' . $this->id )
 					),
 					'disabled'    => true,
-					'description' => __( '<a href="https://dashboard.orcuspay.com/developers/webhooks" target="_blank" rel="noreferrer>Add</a> a new webhook for this URL subscribing <code>checkout.session.complete</code> events.', 'orcuspay-woo' ),
+					'description' => __( '<a href="https://dashboard.orcus.com/developers/webhooks" target="_blank" rel="noreferrer>Add</a> a new webhook for this URL subscribing <code>checkout.session.complete</code> events.', 'orcus-woo' ),
 				),
 				'webhook_secret' => array(
-					'title'       => __( 'Webhook secret', 'orcuspay-woo' ),
+					'title'       => __( 'Webhook secret', 'orcus-woo' ),
 					'type'        => 'password',
-					'description' => __( 'The webhook secret is used to authenticate webhooks sent from OrcusPay. Get it from your <a href="https://dashboard.orcuspay.com/developers/webhooks" target="_blank" rel="noreferrer>OrcusPay Dashboard</a>.', 'orcuspay-woo' ),
+					'description' => __( 'The webhook secret is used to authenticate webhooks sent from Orcus. Get it from your <a href="https://dashboard.orcus.com/developers/webhooks" target="_blank" rel="noreferrer>Orcus Dashboard</a>.', 'orcus-woo' ),
 				),
 			) );
 		}
@@ -158,7 +163,7 @@ function orcuspay_woo_init() {
 			);
 
 			$response = wp_remote_post(
-				'https://api.orcuspay.com/api/checkout/session', array(
+				'https://api.orcus.com/api/checkout/session', array(
 					'method'  => 'POST',
 					'headers' => array(
 						'content-type'      => 'application/json',
@@ -193,6 +198,7 @@ function orcuspay_woo_init() {
 		public function webhook() {
 			$payload = file_get_contents( 'php://input' );
 			$headers = getallheaders();
+			
 			try {
 				$wh   = new \Svix\Webhook( $this->webhook_secret );
 				$data = $wh->verify( $payload, [
@@ -207,7 +213,7 @@ function orcuspay_woo_init() {
 				$tiny_tag   = $data['data']['tiny_tag'];
 
 				$verify_response = wp_remote_post(
-					"https://api.orcuspay.com/api/checkout/session/$session_id", array(
+					"https://api.orcus.com/api/checkout/session/$session_id", array(
 						'method'  => 'POST',
 						'headers' => array(
 							'content-type'      => 'application/json',
@@ -226,7 +232,7 @@ function orcuspay_woo_init() {
 
 				if ( $status != 'SUCCEEDED' ) {
 					$order->add_order_note(
-						'Payment failed with OrcusPay. Tiny tag: ' . $tiny_tag . ' Status: ' . $status
+						'Payment failed with Orcus. Tiny tag: ' . $tiny_tag . ' Status: ' . $status
 					);
 					die();
 				}
@@ -236,7 +242,7 @@ function orcuspay_woo_init() {
 
 				if ( $order_amount != $response_amount ) {
 					$order->add_order_note(
-						'Payment failed with OrcusPay. Tiny tag: ' . $tiny_tag . ' Amount mismatch.'
+						'Payment failed with Orcus. Tiny tag: ' . $tiny_tag . ' Amount mismatch.'
 					);
 					die();
 				}
@@ -244,7 +250,7 @@ function orcuspay_woo_init() {
 				$order->reduce_order_stock();
 				$order->payment_complete();
 				$order->add_order_note(
-					'Payment completed with OrcusPay. Tiny tag: ' . $tiny_tag
+					'Payment completed with Orcus. Tiny tag: ' . $tiny_tag
 				);
 			} catch ( Exception $e ) {
 				echo $e;
@@ -255,7 +261,7 @@ function orcuspay_woo_init() {
 		final public function actionLinks( array $links ): array {
 			if ( current_user_can( 'manage_woocommerce' ) ) {
 				$admin_setting_path = 'admin.php?page=wc-settings&tab=checkout&section=';
-				$config_url         = esc_url( admin_url( $admin_setting_path . ORCUSPAY_WOO_PLUGIN_SLUG ) );
+				$config_url         = esc_url( admin_url( $admin_setting_path . ORCUS_WOO_PLUGIN_SLUG ) );
 				$plugin_links       = array(
 					'<a href="' . esc_attr( $config_url ) . '">Settings</a>',
 				);
@@ -268,10 +274,10 @@ function orcuspay_woo_init() {
 	}
 }
 
-add_filter( 'woocommerce_payment_gateways', 'orcuspay_woo_add_gateway' );
+add_filter( 'woocommerce_payment_gateways', 'orcus_woo_add_gateway' );
 
-function orcuspay_woo_add_gateway( $gateways ) {
-	$gateways[] = 'WC_OrcusPay';
+function orcus_woo_add_gateway( $gateways ) {
+	$gateways[] = 'WC_Orcus';
 
 	return $gateways;
 }

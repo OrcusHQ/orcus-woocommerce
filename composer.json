@@ -1,18 +1,18 @@
 {
-    "name": "orcuspay/orcuspay-woocommerce",
-    "description": "OrcusPay for WooCommerce.",
+    "name": "orcus/woocommerce",
+    "description": "Orcus for WooCommerce.",
     "require": {
         "svix/svix": "^0.82.1"
     },
     "autoload": {
         "psr-4": {
-            "Orcuspay\\OrcuspayWoocommerce\\": "src/"
+            "Orcus\\WooCommerce\\": "src/"
         }
     },
     "authors": [
         {
-            "name": "orcuspay",
-            "email": "support@orcuspay.com"
+            "name": "orcus",
+            "email": "support@orcus.com.bd"
         }
     ],
     "require-dev": {
