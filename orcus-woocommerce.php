@@ -16,7 +16,7 @@
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 define( 'ORCUS_WOO_PLUGIN_SLUG', 'orcus' );
@@ -42,6 +42,7 @@ function orcus_woo_init() {
 			$this->has_fields         = false;
 			$this->method_title       = __( 'Orcus', 'orcus-woo' );
 			$this->method_description = __( 'Orcus for WooCommerce', 'orcus-woo' );
+			$this->webhook_url_string = esc_url( get_site_url() . '/wc-api/' . $this->id );
 
 			$this->init_form_fields();
 
@@ -51,7 +52,6 @@ function orcus_woo_init() {
 			$this->access_key     = $this->get_option( 'access_key' );
 			$this->secret_key     = $this->get_option( 'secret_key' );
 			$this->webhook_secret = $this->get_option( 'webhook_secret' );
-			$this->webhook_url    = $this->get_option( 'webhook_url' );
 
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array(
 				$this,
@@ -101,8 +101,8 @@ function orcus_woo_init() {
 						'%s',
 						esc_url( get_site_url() . '/wc-api/' . $this->id )
 					),
-					'disabled'    => true,
-					'description' => __( '<a href="https://dashboard.orcus.com.bd/developers/webhooks" target="_blank" rel="noreferrer>Add</a> a new webhook for this URL subscribing <code>checkout.session.complete</code> events.', 'orcus-woo' ),
+					'class'       => 'orcus-woo-webhook-url',
+					'description' => __( 'Add this webhook <code>' . $this->webhook_url_string . '</code> on your Orcus Dashboard. <a href="https://dashboard.orcus.com.bd/developers/webhooks" target="_blank" rel="noreferrer>Click here to add</a>', 'orcus-woo' ),
 				),
 				'webhook_secret' => array(
 					'title'       => __( 'Webhook secret', 'orcus-woo' ),
@@ -198,7 +198,7 @@ function orcus_woo_init() {
 		public function webhook() {
 			$payload = file_get_contents( 'php://input' );
 			$headers = getallheaders();
-			
+
 			try {
 				$wh   = new \Svix\Webhook( $this->webhook_secret );
 				$data = $wh->verify( $payload, [
@@ -275,9 +275,14 @@ function orcus_woo_init() {
 }
 
 add_filter( 'woocommerce_payment_gateways', 'orcus_woo_add_gateway' );
+add_action( 'admin_enqueue_scripts', 'orcus_woo_css' );
 
 function orcus_woo_add_gateway( $gateways ) {
 	$gateways[] = 'WC_Orcus';
 
 	return $gateways;
+}
+
+function orcus_woo_css() {
+	wp_enqueue_style( 'orcus-woo-css', plugins_url( 'assets/css/styles.css', __FILE__ ) );
 }
