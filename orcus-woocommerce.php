@@ -5,7 +5,7 @@
  * Description: Orcus for WooCommerce
  * Author: Orcus
  * Author URI: https://orcus.com.bd/
- * Version: 0.1.0
+ * Version: 0.1.1
  * Requires at least: 5.9
  * Tested up to: 6.2
  * WC requires at least: 7.1
