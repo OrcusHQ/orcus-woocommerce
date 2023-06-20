@@ -3,6 +3,7 @@
 /*
  * Plugin Name: Orcus for WooCommerce
  * Description: Orcus for WooCommerce
+ * Plugin URI: https://wordpress.org/plugins/orcuspay-for-woocommerce
  * Author: Orcus
  * Author URI: https://orcus.com.bd/
  * Version: 0.1.1

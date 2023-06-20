@@ -1,22 +1,18 @@
 {
-    "name": "orcus/woocommerce",
-    "description": "Orcus for WooCommerce.",
-    "require": {
-        "svix/svix": "^0.82.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "Orcus\\WooCommerce\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "orcus",
-            "email": "support@orcus.com.bd"
-        }
-    ],
-    "require-dev": {
-        "squizlabs/php_codesniffer": "^2.2",
-        "wp-coding-standards/wpcs": "^0.9.0"
+  "name": "orcus/woocommerce",
+  "description": "Orcus for WooCommerce.",
+  "require": {
+    "svix/svix": "^0.82.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Orcus\\WooCommerce\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "orcus",
+      "email": "support@orcus.com.bd"
+    }
+  ]
 }
