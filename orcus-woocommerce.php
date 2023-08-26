@@ -6,9 +6,9 @@
  * Plugin URI: https://wordpress.org/plugins/orcuspay-for-woocommerce
  * Author: Orcus
  * Author URI: https://orcus.com.bd/
- * Version: 0.1.1
+ * Version: 0.1.2
  * Requires at least: 5.9
- * Tested up to: 6.2
+ * Tested up to: 6.3
  * WC requires at least: 7.1
  * WC tested up to: 7.4
  * License: GPL2 or later
@@ -147,10 +147,25 @@ function orcus_woo_init() {
 				);
 			}
 
+			if ( empty( $products ) ) {
+				$products[] = array(
+					'quantity'   => 1,
+					'price_data' => array(
+						'unit_amount'  => $order->total * 100,
+						'product_data' => array(
+							'name'        => 'Payment'
+						)
+					)
+				);
+			}
+
+			$first_name_last_name = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
+			$customer_name        = !empty( trim( $first_name_last_name ) ) ? $first_name_last_name : 'Guest';
+
 			$payload = array(
 				'line_items'  => $products,
 				'customer'    => array(
-					'name'    => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+					'name'    => $customer_name,
 					'email'   => $order->get_billing_email(),
 					'phone'   => $order->get_billing_phone(),
 					'address' => $order->get_billing_address_1() . ' ' . $order->get_billing_address_2(),
@@ -164,7 +179,7 @@ function orcus_woo_init() {
 			);
 
 			$response = wp_remote_post(
-				'https://api.orcus.com.bd/api/checkout/session', array(
+				'http://localhost:3000/api/checkout/session', array(
 					'method'  => 'POST',
 					'headers' => array(
 						'content-type'      => 'application/json',
@@ -181,6 +196,8 @@ function orcus_woo_init() {
 
 				return;
 			}
+
+			var_dump( $response );
 
 			if ( $response['response']['code'] != 200 ) {
 				wc_add_notice( 'Gateway error.', 'error' );
@@ -214,7 +231,7 @@ function orcus_woo_init() {
 				$tiny_tag   = $data['data']['tiny_tag'];
 
 				$verify_response = wp_remote_post(
-					"https://api.orcus.com.bd/api/checkout/session/$session_id", array(
+					"http://localhost:3000/api/checkout/session/$session_id", array(
 						'method'  => 'POST',
 						'headers' => array(
 							'content-type'      => 'application/json',

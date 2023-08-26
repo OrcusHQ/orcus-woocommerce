@@ -2,9 +2,9 @@
 Contributors: orcus.com.bd
 Tags: woocommerce, payment, orcus, bkash, nagad, rocket
 Requires at least: 3.5
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 7.1
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,9 @@ Orcus for WooCommerce is the easiest and most efficient way to manage your payme
 - Customizable payment forms: You can customize your payment forms to match your brand and integrate them seamlessly into your site.
 
 == Changelog ==
+
+== 0.1.2 ==
+* Added support for WooCommerce collect payment option
 
 == 0.1.1 ==
 * Fix webhook url issue
