@@ -6,7 +6,7 @@
  * Plugin URI: https://wordpress.org/plugins/orcuspay-for-woocommerce
  * Author: Orcus
  * Author URI: https://orcus.com.bd/
- * Version: 0.1.2
+ * Version: 0.1.3
  * Requires at least: 5.9
  * Tested up to: 6.3
  * WC requires at least: 7.1
@@ -179,7 +179,7 @@ function orcus_woo_init() {
 			);
 
 			$response = wp_remote_post(
-				'http://localhost:3000/api/checkout/session', array(
+				'https://api.orcus.com.bd/api/checkout/session', array(
 					'method'  => 'POST',
 					'headers' => array(
 						'content-type'      => 'application/json',
@@ -231,7 +231,7 @@ function orcus_woo_init() {
 				$tiny_tag   = $data['data']['tiny_tag'];
 
 				$verify_response = wp_remote_post(
-					"http://localhost:3000/api/checkout/session/$session_id", array(
+					"https://api.orcus.com.bd/api/checkout/session/$session_id", array(
 						'method'  => 'POST',
 						'headers' => array(
 							'content-type'      => 'application/json',
