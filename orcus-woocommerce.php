@@ -88,12 +88,12 @@ function orcus_woo_init() {
 				'access_key'     => array(
 					'title'       => __( 'Access key', 'orcus-woo' ),
 					'type'        => 'text',
-					'description' => __( 'Get your access key from <a href="https://dashboard.orcus.com.bd/developers" target="_blank" rel="noreferrer>Orcus Dashboard</a>.', 'orcus-woo' ),
+					'description' => __( 'Get your access key from <a href="https://dash.orcuspay.com/developers" target="_blank" rel="noreferrer>Orcus Dashboard</a>.', 'orcus-woo' ),
 				),
 				'secret_key'     => array(
 					'title'       => __( 'Secret key', 'orcus-woo' ),
 					'type'        => 'password',
-					'description' => __( 'Get your secret key from <a href="https://dashboard.orcus.com.bd/developers" target="_blank" rel="noreferrer>Orcus Dashboard</a>.', 'orcus-woo' ),
+					'description' => __( 'Get your secret key from <a href="https://dash.orcuspay.com/developers" target="_blank" rel="noreferrer>Orcus Dashboard</a>.', 'orcus-woo' ),
 				),
 				'webhook_url'    => array(
 					'type'        => 'text',
@@ -103,12 +103,12 @@ function orcus_woo_init() {
 						esc_url( get_site_url() . '/wc-api/' . $this->id )
 					),
 					'class'       => 'orcus-woo-webhook-url',
-					'description' => __( 'Add this webhook <code>' . $this->webhook_url_string . '</code> on your Orcus Dashboard. <a href="https://dashboard.orcus.com.bd/developers/webhooks" target="_blank" rel="noreferrer>Click here to add</a>', 'orcus-woo' ),
+					'description' => __( 'Add this webhook <code>' . $this->webhook_url_string . '</code> on your Orcus Dashboard. <a href="https://dash.orcuspay.com/developers/webhooks" target="_blank" rel="noreferrer>Click here to add</a>', 'orcus-woo' ),
 				),
 				'webhook_secret' => array(
 					'title'       => __( 'Webhook secret', 'orcus-woo' ),
 					'type'        => 'password',
-					'description' => __( 'The webhook secret is used to authenticate webhooks sent from Orcus. Get it from your <a href="https://dashboard.orcus.com.bd/developers/webhooks" target="_blank" rel="noreferrer>Orcus Dashboard</a>.', 'orcus-woo' ),
+					'description' => __( 'The webhook secret is used to authenticate webhooks sent from Orcus. Get it from your <a href="https://dash.orcuspay.com/developers/webhooks" target="_blank" rel="noreferrer>Orcus Dashboard</a>.', 'orcus-woo' ),
 				),
 			) );
 		}
@@ -179,7 +179,7 @@ function orcus_woo_init() {
 			);
 
 			$response = wp_remote_post(
-				'https://api.orcus.com.bd/api/checkout/session', array(
+				'https://api.orcuspay.com/api/checkout/session', array(
 					'method'  => 'POST',
 					'headers' => array(
 						'content-type'      => 'application/json',
@@ -230,7 +230,7 @@ function orcus_woo_init() {
 				$tiny_tag   = $data['data']['tiny_tag'];
 
 				$verify_response = wp_remote_post(
-					"https://api.orcus.com.bd/api/checkout/session/$session_id", array(
+					"https://api.orcuspay.com/api/checkout/session/$session_id", array(
 						'method'  => 'POST',
 						'headers' => array(
 							'content-type'      => 'application/json',
