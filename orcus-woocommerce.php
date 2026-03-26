@@ -214,6 +214,7 @@ function orcus_woo_init() {
 		public function webhook() {
 			$payload = file_get_contents( 'php://input' );
 			$headers = getallheaders();
+			$order   = null;
 
 			try {
 				$wh   = new \Svix\Webhook( $this->webhook_secret );
@@ -243,6 +244,7 @@ function orcus_woo_init() {
 				$verify_body = json_decode( $verify_response['body'], true );
 
 				$order_id        = $verify_body['meta_data']['order_id'];
+				$order           = wc_get_order( $order_id );
 				$status          = $verify_body['payment_status'];
 				$response_amount = $verify_body['amount_total'];
 
@@ -253,7 +255,6 @@ function orcus_woo_init() {
 					die();
 				}
 
-				$order        = wc_get_order( $order_id );
 				$order_amount = $order->get_total() * 100;
 
 				if ( $order_amount != $response_amount ) {
@@ -269,7 +270,11 @@ function orcus_woo_init() {
 					'Payment completed with Orcus. Tiny tag: ' . $tiny_tag
 				);
 			} catch ( Exception $e ) {
-				$order->add_order_note( 'Webhook error: ' . $e->getMessage() );
+				if ( $order ) {
+					$order->add_order_note( 'Webhook error: ' . $e->getMessage() );
+				} else {
+					error_log( 'Orcus webhook error: ' . $e->getMessage() );
+				}
 				die();
 			}
 		}
