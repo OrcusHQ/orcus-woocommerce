@@ -197,8 +197,6 @@ function orcus_woo_init() {
 				return;
 			}
 
-			var_dump( $response );
-
 			if ( $response['response']['code'] != 200 ) {
 				wc_add_notice( 'Gateway error.', 'error' );
 
@@ -271,7 +269,7 @@ function orcus_woo_init() {
 					'Payment completed with Orcus. Tiny tag: ' . $tiny_tag
 				);
 			} catch ( Exception $e ) {
-				echo $e;
+				$order->add_order_note( 'Webhook error: ' . $e->getMessage() );
 				die();
 			}
 		}
