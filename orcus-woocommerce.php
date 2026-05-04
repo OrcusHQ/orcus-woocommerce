@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'ORCUS_WOO_PLUGIN_SLUG', 'orcus' );
 define( 'ORCUS_WOO_PLUGIN_BASEPATH', plugin_basename( __FILE__ ) );
-define( 'ORCUS_WOO_API_URL', 'https://dash.orcuspay.com/api' );
+define( 'ORCUS_WOO_API_URL', 'https://brain.orcuspay.com/api' );
 
 require_once __DIR__ . '/vendor/autoload.php';
 
