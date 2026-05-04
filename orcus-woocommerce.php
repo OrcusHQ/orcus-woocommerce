@@ -24,6 +24,12 @@ define( 'ORCUS_WOO_PLUGIN_SLUG', 'orcus' );
 define( 'ORCUS_WOO_PLUGIN_BASEPATH', plugin_basename( __FILE__ ) );
 define( 'ORCUS_WOO_API_URL', 'https://brain.orcuspay.com/api' );
 
+add_action( 'before_woocommerce_init', function() {
+	if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+	}
+} );
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
