@@ -1,10 +1,10 @@
-Orcus for WooCommerce
+OrcusPay for WooCommerce
 
-Copyright 2013 by the contributors
+Copyright 2026 by the contributors
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 3 of the License, or
+the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
@@ -22,7 +22,7 @@ permission notices:
   WooCommerce
   WooCommerce is released under the GPL v3 or later (http://www.opensource.org/licenses/gpl-license.php)
 
-  Orcus for WooCommerce is released under the GPL
+  OrcusPay for WooCommerce is released under the GPL
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 

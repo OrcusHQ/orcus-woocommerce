@@ -1,25 +1,42 @@
-=== Orcus for WooCommerce ===
-Contributors: orcus.com.bd
-Tags: woocommerce, payment, orcus, bkash, nagad, rocket
-Requires at least: 3.5
+=== OrcusPay for WooCommerce ===
+Contributors: orcuspay
+Tags: woocommerce, payment, orcuspay, checkout, bkash, nagad, rocket
+Requires at least: 5.9
 Tested up to: 6.3
-Requires PHP: 7.1
-Stable tag: 0.1.3
+Requires PHP: 7.4
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Simplify your payment transactions with Orcus, the easiest way to automate payments on your WooCommerce site.
+Accept payments on WooCommerce with OrcusPay Checkout.
 
 == Description ==
 
-Orcus for WooCommerce is the easiest and most efficient way to manage your payments on your woocommerce site. With our plugin, you can easily manage your payments, streamline your process, and focus on growing your business.
+OrcusPay for WooCommerce redirects customers to OrcusPay Checkout, verifies completed payments with OrcusPay, and marks WooCommerce orders paid after secure webhook confirmation.
 
 = Main features =
-- Easy setup: Our plugin is easy to install and set up, allowing you to start automating payments on your WooCommerce site in no time.
-- Multiple payment gateways: Our plugin supports multiple payment gateways, including bKash, Nagad, Rocket, upay, and CellFin, making it easy for your customers to pay you. You will be using your own gateway credentials, and we will simply automate your payment process.
-- Customizable payment forms: You can customize your payment forms to match your brand and integrate them seamlessly into your site.
+- Hosted OrcusPay Checkout redirect
+- API key and secret authentication
+- Svix-compatible webhook signature verification without extra Composer install
+- Payment amount verification before completing WooCommerce orders
+- Idempotent payment handling to avoid double-crediting paid orders
+- WooCommerce HPOS compatibility declaration
+
+= Setup =
+1. Upload the plugin to WordPress and activate it.
+2. Go to WooCommerce > Settings > Payments > OrcusPay.
+3. Add your API key, API secret, and webhook secret from the OrcusPay dashboard.
+4. Copy the Webhook URL shown in WooCommerce and add it to OrcusPay webhooks.
 
 == Changelog ==
+
+== 0.2.0 ==
+* Updated branding to OrcusPay.
+* Updated checkout API integration.
+* Added self-contained Svix-compatible webhook signature verification.
+* Added payment amount verification and safer idempotent order completion.
+* Added WooCommerce HPOS compatibility declaration.
+* Removed the hard dependency on a bundled Composer vendor folder.
 
 == 0.1.3 ==
 * Bug fixes
