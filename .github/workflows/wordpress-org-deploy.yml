@@ -42,7 +42,7 @@ jobs:
             VERSION="${{ inputs.version }}"
           fi
 
-          PLUGIN_VERSION="$(awk -F': ' '/^[[:space:]]*Version:/ {print $2; exit}' orcus-woocommerce.php)"
+          PLUGIN_VERSION="$(awk -F': ' '/Version:/ {gsub(/^[[:space:]*]+/, "", $1); if ($1 == "Version") {print $2; exit}}' orcus-woocommerce.php)"
           STABLE_TAG="$(awk -F': ' '/^Stable tag:/ {print $2; exit}' readme.txt)"
 
           if [ -z "$VERSION" ] || [ -z "$PLUGIN_VERSION" ] || [ -z "$STABLE_TAG" ]; then
