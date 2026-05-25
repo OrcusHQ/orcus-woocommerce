@@ -1,3 +1,4 @@
 .orcus-woo-webhook-url {
-    display: none;
+    max-width: 520px;
+    font-family: Consolas, Monaco, monospace;
 }

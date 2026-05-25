@@ -4,14 +4,16 @@
  * Plugin Name: OrcusPay for WooCommerce
  * Description: Accept payments with OrcusPay Checkout for WooCommerce.
  * Plugin URI: https://dash.orcuspay.com
- * Author: OrcusPay
+ * Author: Orcus Technology
  * Author URI: https://dash.orcuspay.com
- * Version: 0.2.0
- * Requires at least: 5.9
- * Tested up to: 6.3
+ * Version: 0.2.1
+ * Requires at least: 6.8
+ * Tested up to: 6.9.4
+ * Requires PHP: 7.4
+ * Requires Plugins: woocommerce
  * WC requires at least: 7.1
- * WC tested up to: 7.4
- * License: GPL2 or later
+ * WC tested up to: 10.7.0
+ * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: orcus-woo
 */
@@ -20,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ORCUS_WOO_VERSION', '0.2.0' );
+define( 'ORCUS_WOO_VERSION', '0.2.1' );
 define( 'ORCUS_WOO_PLUGIN_SLUG', 'orcus' );
 define( 'ORCUS_WOO_PLUGIN_BASEPATH', plugin_basename( __FILE__ ) );
 define( 'ORCUS_WOO_DEFAULT_API_BASE_URL', 'https://brain.orcuspay.com/api/v1' );
@@ -483,6 +485,8 @@ function orcus_woo_init() {
 		}
 
 		protected function log( $message ) {
+			$message = wp_strip_all_tags( (string) $message );
+
 			if ( function_exists( 'wc_get_logger' ) ) {
 				wc_get_logger()->info( $message, array( 'source' => 'orcuspay' ) );
 				return;
@@ -496,7 +500,7 @@ function orcus_woo_init() {
 				$admin_setting_path = 'admin.php?page=wc-settings&tab=checkout&section=';
 				$config_url         = esc_url( admin_url( $admin_setting_path . ORCUS_WOO_PLUGIN_SLUG ) );
 				$plugin_links       = array(
-					'<a href="' . esc_attr( $config_url ) . '">' . esc_html__( 'Settings', 'orcus-woo' ) . '</a>',
+					'<a href="' . esc_url( $config_url ) . '">' . esc_html__( 'Settings', 'orcus-woo' ) . '</a>',
 				);
 
 				return array_merge( $plugin_links, $links );
