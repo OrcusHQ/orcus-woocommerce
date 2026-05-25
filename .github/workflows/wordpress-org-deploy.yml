@@ -1,0 +1,109 @@
+name: Deploy to WordPress.org
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Plugin version to publish, for example 0.2.1"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Sync plugin to WordPress.org SVN
+    runs-on: ubuntu-latest
+    env:
+      WPORG_SLUG: orcuspay-for-woocommerce
+      SVN_URL: https://plugins.svn.wordpress.org/orcuspay-for-woocommerce
+      WPORG_USERNAME: ${{ secrets.WPORG_USERNAME }}
+      WPORG_PASSWORD: ${{ secrets.WPORG_PASSWORD }}
+
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v4
+
+      - name: Install SVN tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y subversion rsync
+
+      - name: Resolve release version
+        id: release
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="${{ inputs.version }}"
+          fi
+
+          PLUGIN_VERSION="$(awk -F': ' '/^[[:space:]]*Version:/ {print $2; exit}' orcus-woocommerce.php)"
+          STABLE_TAG="$(awk -F': ' '/^Stable tag:/ {print $2; exit}' readme.txt)"
+
+          if [ -z "$VERSION" ] || [ -z "$PLUGIN_VERSION" ] || [ -z "$STABLE_TAG" ]; then
+            echo "Could not resolve version metadata."
+            exit 1
+          fi
+
+          if [ "$VERSION" != "$PLUGIN_VERSION" ] || [ "$VERSION" != "$STABLE_TAG" ]; then
+            echo "Version mismatch: release=$VERSION plugin=$PLUGIN_VERSION stable=$STABLE_TAG"
+            exit 1
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Validate WordPress.org credentials
+        run: |
+          if [ -z "$WPORG_USERNAME" ] || [ -z "$WPORG_PASSWORD" ]; then
+            echo "Add WPORG_USERNAME and WPORG_PASSWORD in GitHub repo secrets first."
+            exit 1
+          fi
+
+      - name: Checkout WordPress.org SVN
+        run: |
+          SVN_DIR="$RUNNER_TEMP/$WPORG_SLUG"
+          svn checkout --depth immediates "$SVN_URL" "$SVN_DIR"
+          svn update --set-depth infinity "$SVN_DIR/trunk"
+          echo "SVN_DIR=$SVN_DIR" >> "$GITHUB_ENV"
+
+      - name: Sync GitHub files to SVN trunk
+        run: |
+          rsync -av --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.DS_Store' \
+            ./ "$SVN_DIR/trunk/"
+
+          svn add --force "$SVN_DIR/trunk" --auto-props --parents
+
+          svn status "$SVN_DIR/trunk" | awk '$1 == "!" {print substr($0, 9)}' | sort -r | while IFS= read -r missing_path; do
+            svn delete "$missing_path" || true
+          done
+
+      - name: Create SVN version tag
+        run: |
+          VERSION="${{ steps.release.outputs.version }}"
+
+          if svn info "$SVN_URL/tags/$VERSION" >/dev/null 2>&1; then
+            echo "WordPress.org SVN tag $VERSION already exists."
+            exit 1
+          fi
+
+          svn copy "$SVN_DIR/trunk" "$SVN_DIR/tags/$VERSION"
+
+      - name: Show SVN changes
+        run: svn status "$SVN_DIR"
+
+      - name: Commit to WordPress.org
+        run: |
+          VERSION="${{ steps.release.outputs.version }}"
+          svn commit "$SVN_DIR" \
+            --message "Release OrcusPay for WooCommerce $VERSION" \
+            --username "$WPORG_USERNAME" \
+            --password "$WPORG_PASSWORD" \
+            --non-interactive
