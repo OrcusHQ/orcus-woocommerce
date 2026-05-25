@@ -1,6 +1,5 @@
 === OrcusPay for WooCommerce ===
-Contributors: orcuspay
-Tags: woocommerce, payment, orcuspay, checkout, bkash, nagad, rocket
+Tags: woocommerce, payment-gateway, orcuspay, checkout, payments
 Requires at least: 6.8
 Tested up to: 6.9.4
 Requires PHP: 7.4

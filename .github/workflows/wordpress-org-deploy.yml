@@ -69,6 +69,7 @@ jobs:
           SVN_DIR="$RUNNER_TEMP/$WPORG_SLUG"
           svn checkout --depth immediates "$SVN_URL" "$SVN_DIR"
           svn update --set-depth infinity "$SVN_DIR/trunk"
+          svn update --set-depth immediates "$SVN_DIR/tags"
           echo "SVN_DIR=$SVN_DIR" >> "$GITHUB_ENV"
 
       - name: Sync GitHub files to SVN trunk
@@ -90,11 +91,21 @@ jobs:
           VERSION="${{ steps.release.outputs.version }}"
 
           if svn info "$SVN_URL/tags/$VERSION" >/dev/null 2>&1; then
-            echo "WordPress.org SVN tag $VERSION already exists."
-            exit 1
-          fi
+            svn update --set-depth infinity "$SVN_DIR/tags/$VERSION"
+            rsync -av --delete \
+              --exclude='.git' \
+              --exclude='.github' \
+              --exclude='.DS_Store' \
+              "$SVN_DIR/trunk/" "$SVN_DIR/tags/$VERSION/"
 
-          svn copy "$SVN_DIR/trunk" "$SVN_DIR/tags/$VERSION"
+            svn add --force "$SVN_DIR/tags/$VERSION" --auto-props --parents
+
+            svn status "$SVN_DIR/tags/$VERSION" | awk '$1 == "!" {print substr($0, 9)}' | sort -r | while IFS= read -r missing_path; do
+              svn delete "$missing_path" || true
+            done
+          else
+            svn copy "$SVN_DIR/trunk" "$SVN_DIR/tags/$VERSION"
+          fi
 
       - name: Show SVN changes
         run: svn status "$SVN_DIR"
