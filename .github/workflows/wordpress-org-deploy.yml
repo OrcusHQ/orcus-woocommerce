@@ -26,7 +26,11 @@ jobs:
 
     steps:
       - name: Checkout GitHub repository
-        uses: actions/checkout@v4
+        run: |
+          git init .
+          git remote add origin https://github.com/OrcusHQ/orcus-woocommerce.git
+          git fetch --depth=1 origin "$GITHUB_SHA"
+          git checkout --detach FETCH_HEAD
 
       - name: Install SVN tools
         run: |
