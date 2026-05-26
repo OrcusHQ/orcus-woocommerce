@@ -6,23 +6,23 @@
  * Plugin URI: https://dash.orcuspay.com
  * Author: Orcus Technology
  * Author URI: https://dash.orcuspay.com
- * Version: 0.2.1
+ * Version: 0.2.2
  * Requires at least: 6.8
- * Tested up to: 6.9.4
+ * Tested up to: 7.0
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
  * WC requires at least: 7.1
  * WC tested up to: 10.7.0
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: orcus-woo
+ * Text Domain: orcuspay-for-woocommerce
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ORCUS_WOO_VERSION', '0.2.1' );
+define( 'ORCUS_WOO_VERSION', '0.2.2' );
 define( 'ORCUS_WOO_PLUGIN_SLUG', 'orcus' );
 define( 'ORCUS_WOO_PLUGIN_BASEPATH', plugin_basename( __FILE__ ) );
 define( 'ORCUS_WOO_DEFAULT_API_BASE_URL', 'https://brain.orcuspay.com/api/v1' );
@@ -55,8 +55,8 @@ function orcus_woo_init() {
 			$this->id                 = ORCUS_WOO_PLUGIN_SLUG;
 			$this->icon               = plugins_url( 'assets/images/orcus.png', __FILE__ );
 			$this->has_fields         = false;
-			$this->method_title       = __( 'OrcusPay', 'orcus-woo' );
-			$this->method_description = __( 'Accept payments through OrcusPay Checkout.', 'orcus-woo' );
+			$this->method_title       = __( 'OrcusPay', 'orcuspay-for-woocommerce' );
+			$this->method_description = __( 'Accept payments through OrcusPay Checkout.', 'orcuspay-for-woocommerce' );
 			$this->supports           = array( 'products' );
 			$this->webhook_url_string = WC()->api_request_url( $this->id );
 
@@ -83,61 +83,61 @@ function orcus_woo_init() {
 
 			$this->form_fields = apply_filters( 'orcus_woo_fields', array(
 				'enabled'        => array(
-					'title'       => __( 'Enable/Disable', 'orcus-woo' ),
-					'label'       => __( 'Enable OrcusPay', 'orcus-woo' ),
+					'title'       => __( 'Enable/Disable', 'orcuspay-for-woocommerce' ),
+					'label'       => __( 'Enable OrcusPay', 'orcuspay-for-woocommerce' ),
 					'type'        => 'checkbox',
 					'description' => '',
 					'default'     => 'yes',
 				),
 				'title'          => array(
-					'title'       => __( 'Title', 'orcus-woo' ),
+					'title'       => __( 'Title', 'orcuspay-for-woocommerce' ),
 					'type'        => 'text',
-					'description' => __( 'This controls the title customers see during checkout.', 'orcus-woo' ),
-					'default'     => __( 'OrcusPay', 'orcus-woo' ),
+					'description' => __( 'This controls the title customers see during checkout.', 'orcuspay-for-woocommerce' ),
+					'default'     => __( 'OrcusPay', 'orcuspay-for-woocommerce' ),
 					'desc_tip'    => true,
 				),
 				'description'    => array(
-					'title'       => __( 'Description', 'orcus-woo' ),
+					'title'       => __( 'Description', 'orcuspay-for-woocommerce' ),
 					'type'        => 'text',
-					'description' => __( 'This controls the description customers see during checkout.', 'orcus-woo' ),
-					'default'     => __( 'Pay securely with OrcusPay.', 'orcus-woo' ),
+					'description' => __( 'This controls the description customers see during checkout.', 'orcuspay-for-woocommerce' ),
+					'default'     => __( 'Pay securely with OrcusPay.', 'orcuspay-for-woocommerce' ),
 					'desc_tip'    => true,
 				),
 				'access_key'     => array(
-					'title'       => __( 'API key', 'orcus-woo' ),
+					'title'       => __( 'API key', 'orcuspay-for-woocommerce' ),
 					'type'        => 'text',
 					'description' => sprintf(
 						/* translators: %s: OrcusPay Dashboard link. */
-						__( 'Get your API key from %s.', 'orcus-woo' ),
+						__( 'Get your API key from %s.', 'orcuspay-for-woocommerce' ),
 						$dashboard_link
 					),
 				),
 				'secret_key'     => array(
-					'title'       => __( 'API secret', 'orcus-woo' ),
+					'title'       => __( 'API secret', 'orcuspay-for-woocommerce' ),
 					'type'        => 'password',
 					'description' => sprintf(
 						/* translators: %s: OrcusPay Dashboard link. */
-						__( 'Get your API secret from %s.', 'orcus-woo' ),
+						__( 'Get your API secret from %s.', 'orcuspay-for-woocommerce' ),
 						$dashboard_link
 					),
 				),
 				'webhook_url'    => array(
 					'type'              => 'text',
-					'title'             => __( 'Webhook URL', 'orcus-woo' ),
+					'title'             => __( 'Webhook URL', 'orcuspay-for-woocommerce' ),
 					'default'           => $this->webhook_url_string,
-					'class'             => 'orcus-woo-webhook-url',
+					'class'             => 'orcuspay-for-woocommerce-webhook-url',
 					'custom_attributes' => array( 'readonly' => 'readonly' ),
 					'description'       => sprintf(
 						/* translators: 1: webhook URL, 2: OrcusPay webhooks link. */
-						__( 'Add this webhook URL in %2$s: %1$s', 'orcus-woo' ),
+						__( 'Add this webhook URL in %2$s: %1$s', 'orcuspay-for-woocommerce' ),
 						'<code>' . esc_html( $this->webhook_url_string ) . '</code>',
 						$webhooks_link
 					),
 				),
 				'webhook_secret' => array(
-					'title'       => __( 'Webhook secret', 'orcus-woo' ),
+					'title'       => __( 'Webhook secret', 'orcuspay-for-woocommerce' ),
 					'type'        => 'password',
-					'description' => __( 'Used to verify OrcusPay webhook signatures.', 'orcus-woo' ),
+					'description' => __( 'Used to verify OrcusPay webhook signatures.', 'orcuspay-for-woocommerce' ),
 				),
 			) );
 		}
@@ -145,12 +145,12 @@ function orcus_woo_init() {
 		public function process_payment( $order_id ) {
 			$order = wc_get_order( $order_id );
 			if ( ! $order ) {
-				wc_add_notice( __( 'Invalid order.', 'orcus-woo' ), 'error' );
+				wc_add_notice( __( 'Invalid order.', 'orcuspay-for-woocommerce' ), 'error' );
 				return array( 'result' => 'failure' );
 			}
 
 			if ( empty( $this->access_key ) || empty( $this->secret_key ) ) {
-				wc_add_notice( __( 'OrcusPay is not configured.', 'orcus-woo' ), 'error' );
+				wc_add_notice( __( 'OrcusPay is not configured.', 'orcuspay-for-woocommerce' ), 'error' );
 				return array( 'result' => 'failure' );
 			}
 
@@ -177,7 +177,7 @@ function orcus_woo_init() {
 					$order->save();
 				}
 
-				$order->update_status( 'pending', __( 'Awaiting OrcusPay payment.', 'orcus-woo' ) );
+				$order->update_status( 'pending', __( 'Awaiting OrcusPay payment.', 'orcuspay-for-woocommerce' ) );
 
 				return array(
 					'result'   => 'success',
@@ -185,7 +185,7 @@ function orcus_woo_init() {
 				);
 			} catch ( Exception $e ) {
 				$this->log( 'Checkout error for order ' . $order_id . ': ' . $e->getMessage() );
-				wc_add_notice( __( 'Unable to start OrcusPay checkout. Please try again.', 'orcus-woo' ), 'error' );
+				wc_add_notice( __( 'Unable to start OrcusPay checkout. Please try again.', 'orcuspay-for-woocommerce' ), 'error' );
 
 				return array( 'result' => 'failure' );
 			}
@@ -224,7 +224,7 @@ function orcus_woo_init() {
 			$order_number = $order->get_order_number();
 			$name = trim( $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() );
 			if ( empty( $name ) ) {
-				$name = __( 'Guest customer', 'orcus-woo' );
+				$name = __( 'Guest customer', 'orcuspay-for-woocommerce' );
 			}
 
 			return array(
@@ -236,7 +236,7 @@ function orcus_woo_init() {
 							'product_data' => array(
 								'name'        => sprintf(
 									/* translators: %s: WooCommerce order number. */
-									__( 'WooCommerce order #%s', 'orcus-woo' ),
+									__( 'WooCommerce order #%s', 'orcuspay-for-woocommerce' ),
 									$order_number
 								),
 								'description' => $this->get_order_description( $order ),
@@ -301,7 +301,7 @@ function orcus_woo_init() {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: OrcusPay payment status. */
-						__( 'OrcusPay payment is not completed. Status: %s', 'orcus-woo' ),
+						__( 'OrcusPay payment is not completed. Status: %s', 'orcuspay-for-woocommerce' ),
 						$status
 					)
 				);
@@ -318,7 +318,7 @@ function orcus_woo_init() {
 			}
 
 			if ( (int) $amount_paisa !== $this->amount_to_paisa( $order->get_total() ) ) {
-				$order->add_order_note( __( 'OrcusPay payment amount mismatch.', 'orcus-woo' ) );
+				$order->add_order_note( __( 'OrcusPay payment amount mismatch.', 'orcuspay-for-woocommerce' ) );
 				return array( 'status' => 'amount_mismatch' );
 			}
 
@@ -336,7 +336,7 @@ function orcus_woo_init() {
 			$order->add_order_note(
 				sprintf(
 					/* translators: %s: OrcusPay payment id. */
-					__( 'Payment completed with OrcusPay. Payment ID: %s', 'orcus-woo' ),
+					__( 'Payment completed with OrcusPay. Payment ID: %s', 'orcuspay-for-woocommerce' ),
 					esc_html( $payment_id )
 				)
 			);
@@ -500,7 +500,7 @@ function orcus_woo_init() {
 				$admin_setting_path = 'admin.php?page=wc-settings&tab=checkout&section=';
 				$config_url         = esc_url( admin_url( $admin_setting_path . ORCUS_WOO_PLUGIN_SLUG ) );
 				$plugin_links       = array(
-					'<a href="' . esc_url( $config_url ) . '">' . esc_html__( 'Settings', 'orcus-woo' ) . '</a>',
+					'<a href="' . esc_url( $config_url ) . '">' . esc_html__( 'Settings', 'orcuspay-for-woocommerce' ) . '</a>',
 				);
 
 				return array_merge( $plugin_links, $links );
@@ -521,5 +521,5 @@ function orcus_woo_add_gateway( $gateways ) {
 }
 
 function orcus_woo_css() {
-	wp_enqueue_style( 'orcus-woo-css', plugins_url( 'assets/css/styles.css', __FILE__ ), array(), ORCUS_WOO_VERSION );
+	wp_enqueue_style( 'orcuspay-for-woocommerce-css', plugins_url( 'assets/css/styles.css', __FILE__ ), array(), ORCUS_WOO_VERSION );
 }
