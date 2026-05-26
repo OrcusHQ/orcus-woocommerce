@@ -3,10 +3,10 @@
 /*
  * Plugin Name: OrcusPay for WooCommerce
  * Description: Accept payments with OrcusPay Checkout for WooCommerce.
- * Plugin URI: https://dash.orcuspay.com
+ * Plugin URI: https://orcuspay.com/
  * Author: Orcus Technology
- * Author URI: https://dash.orcuspay.com
- * Version: 0.2.2
+ * Author URI: https://orcustech.com/
+ * Version: 0.2.3
  * Requires at least: 6.8
  * Tested up to: 7.0
  * Requires PHP: 7.4
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ORCUS_WOO_VERSION', '0.2.2' );
+define( 'ORCUS_WOO_VERSION', '0.2.3' );
 define( 'ORCUS_WOO_PLUGIN_SLUG', 'orcus' );
 define( 'ORCUS_WOO_PLUGIN_BASEPATH', plugin_basename( __FILE__ ) );
 define( 'ORCUS_WOO_DEFAULT_API_BASE_URL', 'https://brain.orcuspay.com/api/v1' );
@@ -284,10 +284,6 @@ function orcus_woo_init() {
 
 			$order_id = absint( $this->array_get( $meta, 'woocommerce_order_id' ) );
 			if ( ! $order_id ) {
-				$order_id = $this->find_order_id_by_payment_id( $payment_id );
-			}
-
-			if ( ! $order_id ) {
 				return array( 'status' => 'missing_order_id' );
 			}
 
@@ -366,7 +362,7 @@ function orcus_woo_init() {
 
 			$response = wp_remote_request( esc_url_raw( $url ), $args );
 			if ( is_wp_error( $response ) ) {
-				throw new Exception( $response->get_error_message() );
+				throw new Exception( esc_html( $response->get_error_message() ) );
 			}
 
 			$status = wp_remote_retrieve_response_code( $response );
@@ -377,7 +373,11 @@ function orcus_woo_init() {
 
 			if ( $status < 200 || $status >= 300 ) {
 				$message = $this->array_get( $body, 'error.message', 'OrcusPay API request failed.' );
-				throw new Exception( $message );
+				if ( ! is_scalar( $message ) ) {
+					$message = 'OrcusPay API request failed.';
+				}
+
+				throw new Exception( esc_html( wp_strip_all_tags( (string) $message ) ) );
 			}
 
 			if ( array_key_exists( 'data', $body ) ) {
@@ -444,17 +444,6 @@ function orcus_woo_init() {
 			return sanitize_text_field( $payment_id );
 		}
 
-		protected function find_order_id_by_payment_id( $payment_id ) {
-			$orders = wc_get_orders( array(
-				'limit'      => 1,
-				'return'     => 'ids',
-				'meta_key'   => '_orcuspay_payment_id',
-				'meta_value' => sanitize_text_field( $payment_id ),
-			) );
-
-			return ! empty( $orders ) ? absint( $orders[0] ) : 0;
-		}
-
 		protected function get_header( $name ) {
 			$server_key = 'HTTP_' . strtoupper( str_replace( '-', '_', $name ) );
 			if ( isset( $_SERVER[ $server_key ] ) ) {
@@ -489,10 +478,7 @@ function orcus_woo_init() {
 
 			if ( function_exists( 'wc_get_logger' ) ) {
 				wc_get_logger()->info( $message, array( 'source' => 'orcuspay' ) );
-				return;
 			}
-
-			error_log( 'OrcusPay WooCommerce: ' . $message );
 		}
 
 		final public function actionLinks( array $links ): array {
