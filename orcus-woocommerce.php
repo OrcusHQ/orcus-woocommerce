@@ -6,7 +6,7 @@
  * Plugin URI: https://orcuspay.com/
  * Author: Orcus Technology
  * Author URI: https://orcustech.com/
- * Version: 0.2.3
+ * Version: 0.2.4
  * Requires at least: 6.8
  * Tested up to: 7.0
  * Requires PHP: 7.4
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ORCUS_WOO_VERSION', '0.2.3' );
+define( 'ORCUS_WOO_VERSION', '0.2.4' );
 define( 'ORCUS_WOO_PLUGIN_SLUG', 'orcus' );
 define( 'ORCUS_WOO_PLUGIN_BASEPATH', plugin_basename( __FILE__ ) );
 define( 'ORCUS_WOO_DEFAULT_API_BASE_URL', 'https://brain.orcuspay.com/api/v1' );

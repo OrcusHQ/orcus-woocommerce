@@ -4,7 +4,7 @@ Tags: woocommerce, payment-gateway, orcuspay, checkout, payments
 Requires at least: 6.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.2.3
+Stable tag: 0.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires Plugins: woocommerce
@@ -49,6 +49,9 @@ Terms of service: https://orcuspay.com/terms/
 Privacy policy: https://orcuspay.com/privacy/
 
 == Changelog ==
+
+== 0.2.4 ==
+* Pass WooCommerce order currency to OrcusPay for automatic payment method filtering.
 
 == 0.2.3 ==
 * Updated public plugin and author URLs.
