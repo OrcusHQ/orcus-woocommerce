@@ -258,6 +258,7 @@ function orcus_woo_init() {
 					'order_number'         => (string) $order_number,
 					'site_url'             => home_url(),
 				),
+				'currency'    => strtoupper( $order->get_currency() ),
 				'success_url' => add_query_arg(
 					array( 'orcuspay_payment_id' => '{CHECKOUT_SESSION_ID}' ),
 					$this->get_return_url( $order )
